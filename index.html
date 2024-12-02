@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>John's Page</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        .container {
+            width: 80%;
+            max-width: 500px;
+            text-align: center;
+        }
+        .avatar {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            background-image: url('/asset/avatar/john.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        .name {
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+        .start-button {
+            width: 100%;
+            padding: 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="avatar"></div>
+        <div class="name">John</div>
+        <button class="start-button" onclick="goToMainPage()">시작하기</button>
+    </div>
+
+    <script>
+        function goToMainPage() {
+            window.location.href = 'src/html/main.html';
+        }
+    </script>
+</body>
+</html>
