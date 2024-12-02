@@ -4,48 +4,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>John's Main Page</title>
+    <!-- common.css 연결 -->
+    <link rel="stylesheet" href="/asset/css/common.css">
     <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            font-family: Arial, sans-serif;
-        }
         .header {
             display: flex;
-            justify-content: space-around;
+            justify-content: center;
             align-items: center;
-            padding: 10px;
-            background-color: #f0f0f0;
+            padding: 20px;
+            background-color: var(--primary-bg);
+        }
+        .header-icons {
+            display: flex;
+            gap: 20px;
+        }
+        .header-icon-container {
+            text-align: center;
         }
         .header-icon {
-            width: 40px;
-            height: 40px;
+            width: 100px;
+            height: 100px;
             background-size: cover;
             background-position: center;
+            border-radius: 10px;
             cursor: pointer;
-            opacity: 0.7;
         }
-        .header-icon:hover {
-            opacity: 1;
+        .header-label {
+            margin-top: 10px;
+            font-size: 16px;
+            color: var(--text-color);
         }
         .body-content {
-            height: calc(100% - 60px);
+            padding: 20px;
+            height: calc(100vh - 160px);
             display: flex;
             justify-content: center;
             align-items: center;
         }
-        iframe {
+        #contentFrame {
             width: 100%;
             height: 100%;
             border: none;
+            border-radius: 10px;
         }
     </style>
 </head>
-<body>
+<body class="flex-center">
     <div class="header">
-        <div class="header-icon" style="background-image: url('assets/images/homework.jpg')" onclick="loadContent('homework.html')"></div>
-        <div class="header-icon" style="background-image: url('asset/images/todo.jpg')" onclick="loadContent('todo.html')"></div>
+        <div class="header-icons">
+            <div class="header-icon-container">
+                <div class="header-icon" style="background-image: url('../assets/images/homework.jpg')" onclick="loadContent('homework.html')"></div>
+                <div class="header-label">숙제</div>
+            </div>
+            <div class="header-icon-container">
+                <div class="header-icon" style="background-image: url('../assets/images/todo.jpg')" onclick="loadContent('todo.html')"></div>
+                <div class="header-label">할일</div>
+            </div>
+        </div>
     </div>
     <div class="body-content">
         <iframe id="contentFrame" src="homework.html"></iframe>
