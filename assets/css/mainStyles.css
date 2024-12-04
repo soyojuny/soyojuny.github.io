@@ -1,7 +1,7 @@
 /* Header 스타일 */
 .header {
     position: relative; /* 상대 위치로 설정 */
-    height: 120px;
+    height: 100px; /* 헤더 높이 조정 */
     display: flex;
     align-items: center;
     background-color: var(--primary-bg);
@@ -10,7 +10,7 @@
 /* Home 버튼 왼쪽 고정 */
 .header-left {
     position: absolute;
-    left: 20px; /* 왼쪽 여백 */
+    left: 10px; /* 왼쪽 여백 조정 */
     display: flex;
     align-items: center;
 }
@@ -22,13 +22,13 @@
     left: 50%; /* 수평 중앙 기준 */
     transform: translate(-50%, -50%); /* 중앙으로 이동 */
     display: flex;
-    gap: 20px; /* 아이콘 간 간격 */
+    gap: 15px; /* 아이콘 간 간격 좁히기 */
 }
 
 /* Home 버튼 아이콘 */
 .home-icon {
-    width: 100px;
-    height: 100px;
+    width: 60px; /* 아이콘 크기 축소 */
+    height: 60px; /* 아이콘 크기 축소 */
     background-image: url('../../assets/images/home-icon.png'); /* 홈 아이콘 이미지 */
     background-size: cover;
     background-position: center;
@@ -36,13 +36,14 @@
     cursor: pointer;
 }
 
+/* 아이콘 공통 스타일 */
 .header-icon-container {
     text-align: center;
 }
 
 .header-icon {
-    width: 100px;
-    height: 100px;
+    width: 60px; /* 아이콘 크기 축소 */
+    height: 60px; /* 아이콘 크기 축소 */
     background-size: cover;
     background-position: center;
     border-radius: 10px;
@@ -50,8 +51,8 @@
 }
 
 .header-label {
-    margin-top: 10px;
-    font-size: 16px;
+    margin-top: 5px; /* 레이블 상단 마진 축소 */
+    font-size: 14px; /* 폰트 크기 줄이기 */
     color: var(--text-color);
 }
 
@@ -62,7 +63,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: calc(100vh - 120px); /* header 영역을 제외한 나머지 화면 크기 */
+    height: calc(100vh - 100px); /* header 높이만큼 차감 */
 }
 
 /* iframe 크기 조정 */
