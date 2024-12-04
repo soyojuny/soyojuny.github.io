@@ -36,6 +36,26 @@ body {
     background-color: #0056b3; /* 마우스 오버 시 파란색 */
 }
 
+/* "done" 상태 버튼 스타일 */
+.done-button {
+    background-color: #d3d3d3; /* 밝은 회색 */
+    cursor: not-allowed; /* 클릭 불가 */
+}
+
+.done-button:hover {
+    background-color: #808080; /* 짙은 회색 */
+}
+
+/* "waiting" 상태 버튼 스타일 */
+.waiting-button {
+    background-color: #add8e6; /* 기본 하늘색 */
+    cursor: pointer; /* 클릭 가능 */
+}
+
+.waiting-button:hover {
+    background-color: #0056b3; /* 마우스 오버 시 파란색 */
+}
+
 .content {
     width: 100%;
     max-width: 800px;
