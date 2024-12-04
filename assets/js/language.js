@@ -1,13 +1,51 @@
+import { where } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 import { getCollectionData } from "./firebase.js";
 
-// Firestore에서 데이터 가져와 렌더링
-async function renderLanguageHomeworkList() {
+// 날짜를 yyyymmdd 형식으로 변환하는 함수
+function getFormattedDate(offset = 0) {
+    const date = new Date();
+    date.setDate(date.getDate() + offset);
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, "0");
+    const dd = String(date.getDate()).padStart(2, "0");
+    return `${yyyy}${mm}${dd}`;
+}
+
+// 조건에 맞는 데이터를 조회하는 함수
+async function getFilteredData() {
+    const today = getFormattedDate(); // 오늘 날짜
+    const fiveDaysAgo = getFormattedDate(-5); // 5일 전 날짜
+
+    try {
+        // 오늘 날짜와 같은 데이터 조건 (date == today)
+        const todayFilter = where("date", "==", today);
+
+        // 오늘 이전 5일 데이터 + status가 "waiting"인 데이터 조건 (date <= today && status == "waiting")
+        const fiveDaysAgoFilter = where("date", "<=", today);
+        const statusWaitingFilter = where("status", "==", "waiting");
+
+        // 쿼리 조건 확인 (로그로 찍기)
+        console.log("Filters being applied:");
+        console.log("Today filter:", todayFilter);
+        console.log("Five days ago filter:", fiveDaysAgoFilter);
+        console.log("Status waiting filter:", statusWaitingFilter);
+
+        // 데이터 조회
+        const data = await getCollectionData("/homework/Language Framework/items", [todayFilter, fiveDaysAgoFilter, statusWaitingFilter]);
+        console.log("Filtered Data:", data);
+        return data || [];
+    } catch (error) {
+        console.error("Error fetching filtered data:", error);
+        return [];
+    }
+}
+
+// 필터된 데이터 렌더링
+async function renderData() {
     const languageHomeworkList = document.getElementById("languageHomework-list");
 
     try {
-        const data = await getCollectionData("/homework/Language Framework/items");
-        console.log("Fetched Data:", data); // 데이터 확인
-
+        const data = await getFilteredData();
         if (data.length === 0) {
             languageHomeworkList.innerHTML = "<p>데이터가 없습니다.</p>";
             return;
@@ -24,14 +62,6 @@ async function renderLanguageHomeworkList() {
 
             const button = document.createElement("button");
             button.className = "block-button";
-
-            // status에 따라 버튼 클래스 변경
-            if (item.status === "done") {
-                button.classList.add("done-button"); // "done" 상태
-            } else if (item.status === "waiting") {
-                button.classList.add("waiting-button"); // "waiting" 상태
-            }
-
             button.textContent = "Go";
             button.addEventListener("click", () => navigateToPage(item.link || "#"));
 
@@ -40,8 +70,7 @@ async function renderLanguageHomeworkList() {
             languageHomeworkList.appendChild(div);
         });
     } catch (error) {
-        console.error("Error fetching data:", error);
-        languageHomeworkList.innerHTML = "<p>데이터를 불러오는 중 오류가 발생했습니다.</p>";
+        console.error("Error rendering data:", error);
     }
 }
 
@@ -50,8 +79,5 @@ function navigateToPage(page) {
     window.location.href = page;
 }
 
-// 함수 글로벌로 내보내기
-window.navigateToPage = navigateToPage;
-
 // 초기 렌더링
-document.addEventListener("DOMContentLoaded", renderLanguageHomeworkList);
+document.addEventListener("DOMContentLoaded", renderData);
