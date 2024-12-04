@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Player</title>
+    <link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body>
+    <div class="audio-container">
+        <!-- 상단에 재생 횟수 표시 -->
+        <div class="play-count">
+            <p>Audio Played: <span id="playCount">0</span> times</p>
+        </div>
+
+        <!-- 중앙에 오디오 플레이어 -->
+        <div class="audio-player">
+            <audio id="audioPlayer" controls>
+                <source src="../../assets/audio/fiction/Story 1-2.mp3" type="audio/mp3">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
+    </div>
+
+    <script src="../../assets/js/fwAudio.js"></script>
+</body>
+</html>
