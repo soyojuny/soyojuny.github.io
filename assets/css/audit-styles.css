@@ -1,0 +1,86 @@
+/* 전체 페이지 스타일 */
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4; /* 배경 색 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+}
+
+/* 제목 스타일 */
+h1 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* 오디오 목록 스타일 */
+#audioList {
+    width: 100%;
+    max-width: 600px;
+    margin-top: 20px;
+}
+
+/* 각 오디오 항목 스타일 */
+.audio-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.audio-item img {
+    width: 50px;
+    height: 50px;
+    margin-right: 15px;
+    border-radius: 5px;
+}
+
+.audio-item button {
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.audio-item button:hover {
+    background-color: #45a049;
+}
+
+.audio-item button:disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
+}
+
+/* 완료 버튼 스타일 */
+button {
+    padding: 12px 24px;
+    font-size: 1.2rem;
+    background-color: #008CBA;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 30px;
+}
+
+button:disabled {
+    background-color: #bbb;
+    cursor: not-allowed;
+}
+
+button:hover {
+    background-color: #007B9E;
+}

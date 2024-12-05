@@ -1,6 +1,6 @@
 // Firebase 설정 및 초기화
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+import { getFirestore, collection, getDocs, query, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDQ5v5NsVKwnXtu_ZMvhsYXa8IpMSloguM",
@@ -18,6 +18,9 @@ const db = getFirestore(app);
 // Firebase Firestore의 CRUD 함수
 export async function getCollectionData(collectionName, filters = []) {
     try {
+        console.log("Fetching data from collection:", collectionName);
+        console.log("Applied filters:", filters);
+
         const ref = collection(db, collectionName);
 
         // filters 배열이 비어 있지 않으면, query로 변환
@@ -32,9 +35,40 @@ export async function getCollectionData(collectionName, filters = []) {
             dataList.push({ id: doc.id, ...doc.data() });
         });
 
+        console.log("Fetched data:", dataList);
         return dataList; // 빈 배열이라도 반환
     } catch (error) {
         console.error("Error fetching Firestore data:", error);
         return []; // 오류가 발생하면 빈 배열을 반환
+    }
+}
+
+// 문서 조회 함수
+export async function getDocumentData(documentPath) {
+    try {
+        const docRef = doc(db, documentPath); // 문서 참조 생성
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            console.log("Document data:", docSnap.data());
+            return docSnap.data();
+        } else {
+            console.log("No such document!");
+            return null;
+        }
+    } catch (error) {
+        console.error("Error fetching document:", error.message);
+        return null;
+    }
+}
+
+// Firestore 문서 업데이트 함수
+export async function updateDocumentData(documentPath, data) {
+    try {
+        const docRef = doc(db, documentPath); // 문서 참조 생성
+        await updateDoc(docRef, data); // 문서 업데이트
+        console.log("Document successfully updated!");
+    } catch (error) {
+        console.error("Error updating document:", error);
     }
 }
