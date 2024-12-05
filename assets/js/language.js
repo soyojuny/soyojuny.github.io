@@ -17,23 +17,28 @@ async function getFilteredData() {
     const fiveDaysAgo = getFormattedDate(-5); // 5일 전 날짜
 
     try {
-        // 오늘 날짜와 같은 데이터 조건 (date == today)
+        // 1. date가 오늘인 데이터
         const todayFilter = where("date", "==", today);
+        const todayData = await getCollectionData("/homework/Language Framework/items", [todayFilter]);
 
-        // 오늘 이전 5일 데이터 + status가 "waiting"인 데이터 조건 (date <= today && status == "waiting")
-        const fiveDaysAgoFilter = where("date", "<=", today);
+        // 2. date가 5일 전부터 어제까지이고, status가 "waiting"인 데이터
+        const fiveDaysAgoFilter = where("date", ">=", fiveDaysAgo);
+        const yesterdayFilter = where("date", "<", today);
         const statusWaitingFilter = where("status", "==", "waiting");
+        const waitingData = await getCollectionData("/homework/Language Framework/items", [
+            fiveDaysAgoFilter,
+            yesterdayFilter,
+            statusWaitingFilter,
+        ]);
 
-        // 쿼리 조건 확인 (로그로 찍기)
-        console.log("Filters being applied:");
-        console.log("Today filter:", todayFilter);
-        console.log("Five days ago filter:", fiveDaysAgoFilter);
-        console.log("Status waiting filter:", statusWaitingFilter);
+        // 결과 병합 (필요에 따라 분리도 가능)
+        const combinedData = [...todayData, ...waitingData];
 
-        // 데이터 조회
-        const data = await getCollectionData("/homework/Language Framework/items", [todayFilter, fiveDaysAgoFilter, statusWaitingFilter]);
-        console.log("Filtered Data:", data);
-        return data || [];
+        console.log("Today's Data:", todayData);
+        console.log("Waiting Data:", waitingData);
+        console.log("Combined Data:", combinedData);
+
+        return combinedData;
     } catch (error) {
         console.error("Error fetching filtered data:", error);
         return [];
