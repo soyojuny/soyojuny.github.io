@@ -17,7 +17,11 @@ async function renderHomeworkList() {
         }
 
         homeworkList.innerHTML = ""; // 기존 내용 초기화
-        data.forEach(item => {
+        for (const item of data) {
+            // 각 항목의 상세 데이터를 조회
+            const subItemsData = await getCollectionData(`/homework/${item.id}/items`);
+            const allDone = subItemsData.every(subItem => subItem.status === "done"); // 모든 하위 항목이 "done"인지 확인
+
             const div = document.createElement("div");
             div.className = "block";
 
@@ -29,19 +33,21 @@ async function renderHomeworkList() {
             button.className = "block-button";
 
             // status에 따라 버튼 클래스 변경
-            if (item.status === "done") {
-                button.classList.add("done-button"); // "done" 상태
-            } else if (item.status === "waiting") {
-                button.classList.add("waiting-button"); // "waiting" 상태
+            if (allDone) {
+                button.classList.add("done-button"); // 모든 하위 항목이 "done"이면 "done-button" 적용
+                button.textContent = "Completed"; // 버튼 텍스트 "Done"
+                button.style.cursor = "pointer"; // 클릭 금지 표시 제거
+            } else {
+                button.classList.add("waiting-button"); // 일부라도 "done"이 아닌 상태면 "waiting-button" 적용
+                button.textContent = "Homework"; // 버튼 텍스트 "Homework"
             }
 
-            button.textContent = "Homework";
             button.addEventListener("click", () => navigateToPage(item.link || "#"));
 
             div.appendChild(span);
             div.appendChild(button);
             homeworkList.appendChild(div);
-        });
+        }
     } catch (error) {
         console.error("Error fetching data:", error);
         homeworkList.innerHTML = "<p>데이터를 불러오는 중 오류가 발생했습니다.</p>";
