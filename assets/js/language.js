@@ -1,4 +1,4 @@
-import { where } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+import { where, orderBy } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 import { getCollectionData } from "./firebase.js";
 
 // 날짜를 yyyymmdd 형식으로 변환하는 함수
@@ -17,28 +17,22 @@ async function getFilteredData() {
     const fiveDaysAgo = getFormattedDate(-5); // 5일 전 날짜
 
     try {
-        // 1. date가 오늘인 데이터
-        const todayFilter = where("date", "==", today);
-        const todayData = await getCollectionData("/homework/Language Framework/items", [todayFilter]);
+        // 1. 오늘 날짜부터 5일 전까지 데이터 필터링
+        const dateRangeFilter = where("date", ">=", fiveDaysAgo);  // 5일 전 이후
+        const todayFilter = where("date", "<=", today); // 오늘 이전
 
-        // 2. date가 5일 전부터 어제까지이고, status가 "waiting"인 데이터
-        const fiveDaysAgoFilter = where("date", ">=", fiveDaysAgo);
-        const yesterdayFilter = where("date", "<", today);
-        const statusWaitingFilter = where("status", "==", "waiting");
-        const waitingData = await getCollectionData("/homework/Language Framework/items", [
-            fiveDaysAgoFilter,
-            yesterdayFilter,
-            statusWaitingFilter,
+        // Firestore에서 데이터를 가져올 때, `orderBy`를 추가하여 부등호 필드 정렬을 먼저 지정
+        // 먼저 "date"를 기준으로 정렬하고, 그 이후 "order" 필드로 추가적인 정렬을 합니다.
+        const filteredData = await getCollectionData("/homework/Language Framework/items", [
+            dateRangeFilter,
+            todayFilter,
+            orderBy("date"), // date 기준으로 정렬
+            orderBy("order"), // order 필드 기준으로 정렬
         ]);
 
-        // 결과 병합 (필요에 따라 분리도 가능)
-        const combinedData = [...todayData, ...waitingData];
+        console.log("Filtered Data:", filteredData);
 
-        console.log("Today's Data:", todayData);
-        console.log("Waiting Data:", waitingData);
-        console.log("Combined Data:", combinedData);
-
-        return combinedData;
+        return filteredData;
     } catch (error) {
         console.error("Error fetching filtered data:", error);
         return [];
@@ -67,7 +61,17 @@ async function renderData() {
 
             const button = document.createElement("button");
             button.className = "block-button";
-            button.textContent = "Go";
+            
+            // status에 따라 버튼 클래스 및 텍스트 변경
+            if (item.status === "done") {
+                button.classList.add("done-button"); // "done" 상태에서 사용될 클래스
+                button.textContent = "Completed"; // 버튼 텍스트를 "Completed"로 변경
+                button.style.cursor = "pointer"; // 클릭 금지 표시 제거
+            } else if (item.status === "waiting") {
+                button.classList.add("waiting-button"); // "waiting" 상태에서 사용될 클래스
+                button.textContent = "Homework"; // "waiting" 상태에서는 "Homework" 텍스트
+            }
+
             button.addEventListener("click", () => navigateToPage(item.link, item.id));
 
             div.appendChild(span);

@@ -1,3 +1,4 @@
+import { orderBy } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 import { getCollectionData } from "./firebase.js";
 
 // Firestore에서 데이터 가져와 렌더링
@@ -5,7 +6,9 @@ async function renderHomeworkList() {
     const homeworkList = document.getElementById("homework-list");
 
     try {
-        const data = await getCollectionData("/homework");
+        const data = await getCollectionData("/homework", [
+            orderBy("order"), // order 필드 기준으로 정렬
+        ]);
         console.log("Fetched Data:", data); // 데이터 확인
 
         if (data.length === 0) {
