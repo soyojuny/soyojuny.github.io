@@ -1,27 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Audio Player</title>
-    <link rel="stylesheet" href="../../assets/css/styles.css">
+    <link rel="stylesheet" href="../../assets/css/fwAudio.css">
 </head>
 <body>
     <div class="audio-container">
-        <!-- 상단에 재생 횟수 표시 -->
-        <div class="play-count">
-            <p>Audio Played: <span id="playCount">0</span> times</p>
-        </div>
+        <header id="titleContainer" class="title-container" aria-live="polite"></header>
 
-        <!-- 중앙에 오디오 플레이어 -->
-        <div class="audio-player">
-            <audio id="audioPlayer" controls>
-                <source src="../../assets/audio/fiction/Story 1-1.mp3" type="audio/mp3">
-                Your browser does not support the audio element.
+        <main class="audio-player">
+            <audio id="audioPlayer" controlslist="nodownload" 
+                   aria-label="오디오 플레이어" controls>
+                <source src="" type="audio/mp3">
+                브라우저가 오디오를 지원하지 않습니다.
             </audio>
-        </div>
+            <p id="playCountText" class="play-count-text">듣기 횟수: 0</p>
+        </main>
+
+        <footer class="footer-container">
+            <button id="completeButton" class="complete-button" disabled>
+                완료
+            </button>
+        </footer>
     </div>
 
-    <script src="../../assets/js/fwAudio.js"></script>
+    <script type="module" src="../../assets/js/fwAudio.js"></script>
 </body>
 </html>
