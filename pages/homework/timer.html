@@ -3,68 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Timer</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Timer with Firebase</title>
+    <link href="../../assets/css/timer-styles.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-<body class="flex items-center justify-center min-h-screen bg-gray-100 p-4">
-    <div class="w-full max-w-md mx-auto text-center">
-        <div id="timer" class="text-9xl font-bold mb-12 text-gray-800">00:00</div>
-        <div class="flex justify-center space-x-6">
-            <button id="startPauseBtn" class="text-2xl bg-green-500 text-white px-8 py-4 rounded-lg hover:bg-green-600 transition duration-300 shadow-md">시작</button>
-            <button id="resetBtn" class="text-2xl bg-gray-200 p-4 rounded-lg hover:bg-gray-300 transition duration-300 shadow-md">
-                <i class="fas fa-sync-alt text-gray-700"></i>
-            </button>
+<body>
+    <div class="container">
+        <!-- 중앙 박스 -->
+        <div class="card">
+            <!-- Title 영역 -->
+            <header id="titleContainer" class="title-container"></header>
+
+            <!-- Timer 영역 -->
+            <main class="timer-container">
+                <div id="timer" class="timer">00:00</div>
+            </main>
+
+            <!-- 버튼 영역 -->
+            <footer class="button-container">
+                <button id="startPauseBtn" class="button-start">시작</button>
+                <button id="resetBtn" class="button-reset">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+                <button id="completeButton" class="complete-button" disabled>완료</button>
+            </footer>
         </div>
     </div>
-
-    <script>
-        const timerDisplay = document.getElementById('timer');
-        const startPauseBtn = document.getElementById('startPauseBtn');
-        const resetBtn = document.getElementById('resetBtn');
-
-        let interval;
-        let seconds = 0;
-        let isRunning = false;
-
-        function updateDisplay() {
-            const minutes = Math.floor(seconds / 60);
-            const remainingSeconds = seconds % 60;
-            timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
-        }
-
-        startPauseBtn.addEventListener('click', () => {
-            if (!isRunning) {
-                // 시작
-                interval = setInterval(() => {
-                    seconds++;
-                    updateDisplay();
-                }, 1000);
-                startPauseBtn.textContent = '중지';
-                startPauseBtn.classList.remove('bg-green-500');
-                startPauseBtn.classList.add('bg-red-500');
-                isRunning = true;
-            } else {
-                // 중지
-                clearInterval(interval);
-                startPauseBtn.textContent = '시작';
-                startPauseBtn.classList.remove('bg-red-500');
-                startPauseBtn.classList.add('bg-green-500');
-                isRunning = false;
-            }
-        });
-
-        resetBtn.addEventListener('click', () => {
-            clearInterval(interval);
-            seconds = 0;
-            updateDisplay();
-            startPauseBtn.textContent = '시작';
-            startPauseBtn.classList.remove('bg-red-500');
-            startPauseBtn.classList.add('bg-green-500');
-            isRunning = false;
-        });
-
-        updateDisplay();
-    </script>
+    <script type="module" src="../../assets/js/timer.js"></script>
 </body>
 </html>
