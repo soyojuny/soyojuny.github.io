@@ -68,7 +68,7 @@ async function renderData() {
             const button = document.createElement("button");
             button.className = "block-button";
             button.textContent = "Go";
-            button.addEventListener("click", () => navigateToPage(item.link || "#"));
+            button.addEventListener("click", () => navigateToPage(item.link, item.id));
 
             div.appendChild(span);
             div.appendChild(button);
@@ -80,8 +80,10 @@ async function renderData() {
 }
 
 // 페이지 이동 함수
-function navigateToPage(page) {
-    window.location.href = page;
+function navigateToPage(page, itemId) {
+    const collectionPath = "/homework/Non-fiction and Speaking/items";
+    const nextPageUrl = `${page}?collectionPath=${encodeURIComponent(collectionPath)}&itemId=${encodeURIComponent(itemId)}`;
+    window.location.href = nextPageUrl;
 }
 
 // 초기 렌더링
