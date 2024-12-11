@@ -8,11 +8,28 @@
 </head>
 <body>
     <div class="container">
-        <h1>Capture and Upload Image to Firestore</h1>
+        <h1>Capture Image using Rear Camera</h1>
+        
+        <!-- 비디오 요소로 카메라 스트림을 표시 -->
         <video id="video" width="100%" height="auto" autoplay></video>
-        <button id="capture">Capture</button>
+
+        <!-- 캡처 버튼 -->
+        <button id="captureButton">Capture</button>
+
+        <!-- 캡처한 이미지를 그릴 캔버스 -->
         <canvas id="canvas" style="display: none;"></canvas>
-        <button id="saveToFirestore">Save to Firestore</button>
+
+        <!-- 캡처한 이미지를 Firestore에 업로드 후 표시 -->
+        <h2>Captured Image Preview</h2>
+        <img id="capturedImage" alt="Captured Image" style="display:none;" />
+
+        <!-- 저장 버튼 -->
+        <button id="saveButton" style="display:none;">Save Image</button>
+
+        <h2>Captured Images from Firestore</h2>
+        <div id="image-gallery" class="gallery">
+            <!-- Images will be displayed here -->
+        </div>
     </div>
 
     <script type="module" src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
