@@ -1,4 +1,4 @@
-import { getCollectionData } from "../firebase";
+import { addDocumentData } from "../firebase.js";
 
 const videoElement = document.getElementById("video");
 const captureButton = document.getElementById("capture");
@@ -27,31 +27,29 @@ captureButton.addEventListener("click", () => {
     capturedImageData = canvasElement.toDataURL("image/png"); // Base64 이미지 데이터로 변환
 });
 
-// Firestore에 이미지 저장 함수
+// 이미지 캡처 후 Firestore에 저장
 saveButton.addEventListener("click", () => {
     if (!capturedImageData) {
         alert("No image captured!");
         return;
     }
 
-    // 이미지를 압축하고 base64로 변환
     new Compressor(canvasElement.toBlob(), {
-        quality: 0.6, // 압축 품질 (0~1 사이)
-        maxWidth: 800, // 최대 너비
-        maxHeight: 800, // 최대 높이
+        quality: 0.6,
+        maxWidth: 800,
+        maxHeight: 800,
         success(result) {
-            const base64Image = result.toDataURL("image/jpeg"); // 압축된 이미지를 base64로 변환
-            const currentDate = new Date().toISOString().split('T')[0].replace(/-/g, ''); // 오늘 날짜 (YYYYMMDD 형식)
+            const base64Image = result.toDataURL("image/jpeg");
+            const currentDate = new Date().toISOString().split('T')[0].replace(/-/g, '');
 
-            // Firestore에 저장
-            firestore.collection("/todo/read/items").doc(currentDate).set({
-                image: base64Image,  // base64 이미지 데이터
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            })
-            .then(() => {
+            // Firestore에 이미지 데이터 저장
+            addDocumentData("/todo/read/items", {
+                image: base64Image,
+                timestamp: new Date(),
+                date: currentDate
+            }).then(() => {
                 alert("Image uploaded and saved to Firestore!");
-            })
-            .catch(error => {
+            }).catch(error => {
                 console.error("Error saving image to Firestore:", error);
             });
         },

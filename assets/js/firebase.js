@@ -1,6 +1,6 @@
 // Firebase 설정 및 초기화
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-import { getFirestore, collection, getDocs, query, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+import { getFirestore, collection, getDocs, query, doc, getDoc, updateDoc, addDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDQ5v5NsVKwnXtu_ZMvhsYXa8IpMSloguM",
@@ -70,5 +70,16 @@ export async function updateDocumentData(documentPath, data) {
         console.log("Document successfully updated!");
     } catch (error) {
         console.error("Error updating document:", error);
+    }
+}
+
+// Firestore 문서 추가 함수
+export async function addDocumentData(collectionName, data) {
+    try {
+        const collectionRef = collection(db, collectionName); // 컬렉션 참조 생성
+        const docRef = await addDoc(collectionRef, data); // 문서 추가
+        console.log("Document written with ID: ", docRef.id);
+    } catch (error) {
+        console.error("Error adding document:", error);
     }
 }
