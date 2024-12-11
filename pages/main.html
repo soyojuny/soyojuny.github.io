@@ -6,7 +6,7 @@
     <title>John's Main Page</title>
     <!-- common.css 연결 -->
     <link rel="stylesheet" href="../../assets/css/common.css">
-    <link rel="stylesheet" href="../../assets/css/mainStyles.css">
+    <link rel="stylesheet" href="../../assets/css/main-styles.css">
 </head>
 <body>
     <div class="header">
@@ -19,12 +19,12 @@
         </div>
         <!-- 숙제와 할일 버튼 -->
         <div class="header-center">
-            <div class="header-icon-container">
-                <div class="header-icon" style="background-image: url('../../assets/images/homework.jpg')" onclick="loadContent('homework/homework.html')"></div>
+            <div class="header-icon-container selected" id="homeworkBtn" onclick="loadContent('homework/homework.html', 'homeworkBtn')">
+                <div class="header-icon" style="background-image: url('../../assets/images/homework.jpg')"></div>
                 <div class="header-label">숙제</div>
             </div>
-            <div class="header-icon-container">
-                <div class="header-icon" style="background-image: url('../../assets/images/todo.jpg')" onclick="loadContent('todo/todo.html')"></div>
+            <div class="header-icon-container" id="todoBtn" onclick="loadContent('todo/todo.html', 'todoBtn')">
+                <div class="header-icon" style="background-image: url('../../assets/images/todo.jpg')"></div>
                 <div class="header-label">할일</div>
             </div>
         </div>
@@ -34,9 +34,17 @@
     </div>
 
     <script>
-        // 특정 페이지로 iframe 변경
-        function loadContent(page) {
+        // 특정 페이지로 iframe 변경 및 선택된 메뉴 하이라이트
+        function loadContent(page, buttonId) {
             document.getElementById('contentFrame').src = page;
+            
+            // 기존 선택된 버튼의 하이라이트 제거
+            document.querySelectorAll('.header-icon-container').forEach(button => {
+                button.classList.remove('selected');
+            });
+
+            // 현재 버튼에 하이라이트 추가
+            document.getElementById(buttonId).classList.add('selected');
         }
 
         // 최상위 index.html로 이동

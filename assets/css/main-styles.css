@@ -73,3 +73,12 @@
     border: none;
     border-radius: 10px;
 }
+
+.header-icon-container.selected .header-icon {
+    border: 2px solid var(--highlight-color); /* 하이라이트 테두리 */
+    box-shadow: 0 0 10px var(--highlight-color); /* 선택된 아이콘에 그림자 추가 */
+}
+
+:root {
+    --highlight-color: rgb(81, 81, 245); /* 기본 하이라이트 색상 */
+}
