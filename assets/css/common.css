@@ -10,7 +10,7 @@ html, body {
     height: 100%; /* 전체 화면을 채우도록 설정 */
     font-family: Arial, sans-serif;
     line-height: 1.6;
-    overflow: hidden; /* 페이지에서 불필요한 스크롤 제거 */
+    /* overflow: hidden; 페이지에서 불필요한 스크롤 제거 */
 }
 
 /* Typography */
