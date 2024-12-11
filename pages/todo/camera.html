@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capture and Upload to Firebase</title>
+    <link rel="stylesheet" href="../../assets/css/todo/camera.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Capture and Upload Image to Firestore</h1>
+        <video id="video" width="100%" height="auto" autoplay></video>
+        <button id="capture">Capture</button>
+        <canvas id="canvas" style="display: none;"></canvas>
+        <button id="saveToFirestore">Save to Firestore</button>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/compressorjs@1.0.7/dist/compressor.min.js"></script>
+    <script src="../../assets/js/todo/camera.js"></script>
+</body>
+</html>

@@ -1,9 +1,22 @@
-import { orderBy } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+import { where, orderBy } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 import { getCollectionData } from "./firebase.js";
+
+// 날짜를 yyyymmdd 형식으로 변환하는 함수
+function getFormattedDate(offset = 0) {
+    const date = new Date();
+    date.setDate(date.getDate() + offset);
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, "0");
+    const dd = String(date.getDate()).padStart(2, "0");
+    return `${yyyy}${mm}${dd}`;
+}
 
 // Firestore에서 데이터 가져와 렌더링
 async function renderHomeworkList() {
     const homeworkList = document.getElementById("homework-list");
+
+    const today = getFormattedDate(); // 오늘 날짜
+    const fiveDaysAgo = getFormattedDate(-5); // 5일 전 날짜
 
     try {
         const data = await getCollectionData("/homework", [
@@ -18,8 +31,15 @@ async function renderHomeworkList() {
 
         homeworkList.innerHTML = ""; // 기존 내용 초기화
         for (const item of data) {
+            // 1. 오늘 날짜부터 5일 전까지 데이터 필터링
+            const dateRangeFilter = where("date", ">=", fiveDaysAgo);  // 5일 전 이후
+            const todayFilter = where("date", "<=", today); // 오늘 이전
+
             // 각 항목의 상세 데이터를 조회
-            const subItemsData = await getCollectionData(`/homework/${item.id}/items`);
+            const subItemsData = await getCollectionData(`/homework/${item.id}/items`, [
+                dateRangeFilter,
+                todayFilter,
+            ]);
             const allDone = subItemsData.every(subItem => subItem.status === "done"); // 모든 하위 항목이 "done"인지 확인
 
             const div = document.createElement("div");
