@@ -47,7 +47,7 @@ async function renderHomeworkList() {
 
             const span = document.createElement("span");
             span.className = "block-label";
-            span.textContent = item.id;
+            span.textContent = item.title;
 
             const button = document.createElement("button");
             button.className = "block-button";
