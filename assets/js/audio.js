@@ -86,8 +86,18 @@ function playAudio(src, index, totalTracks) {
     // 오디오가 시작될 때 로그 출력
     console.log(`Replaying: ${src} (Track ${index + 1} of ${totalTracks})`);
 
+    // 현재 트랙의 버튼 가져오기
+    const audioListDiv = document.getElementById("audioList");
+    const currentButton = audioListDiv.querySelectorAll(".audio-item button")[index];
+
     // 오디오 재생이 끝났을 때 다음 작업을 처리
     audioPlayer.onended = function() {
+        // 트랙 종료 시 버튼 스타일 변경
+        if (currentButton) {
+            currentButton.style.backgroundColor = "#ddd"; // 버튼 배경색 회색으로 변경
+            currentButton.style.color = "#666"; // 텍스트 색상도 회색으로 변경
+            // currentButton.disabled = true; // 버튼 비활성화
+        }
         // 트랙 종료 시 로그 출력
         console.log(`Track ${index + 1} of ${totalTracks} has finished playing.`);
 
