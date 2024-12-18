@@ -16,7 +16,7 @@ let hair = {
     img: null,
     x: canvas.width / 2,
     y: 100,
-    size: 120,
+    size: 500,
     rotation: 0,
     color: null, // 초기에는 색상 없음
     opacity: 1 // 투명도 초기값
@@ -25,7 +25,7 @@ let accessory = {
     img: null,
     x: canvas.width / 2,
     y: 200,
-    size: 100,
+    size: 500,
     rotation: 0,
 };
 
@@ -128,6 +128,10 @@ function startDrag(e) {
     }
 }
 
+// 초기 각도와 현재 각도 저장
+let initialRotationAngle = null;
+let initialObjectRotation = null;
+
 // 드래그 이동
 function dragMove(e) {
     if (isPinching && e.touches && e.touches.length === 2) {
@@ -177,6 +181,17 @@ function endDrag(e) {
 
 // 두 터치 간 거리 계산
 function getPinchDistance(e) {
+    const touch1 = e.touches[0];
+    const touch2 = e.touches[1];
+    const angle = Math.atan2(
+        touch2.clientY - touch1.clientY,
+        touch2.clientX - touch1.clientX
+    );
+    return (angle * 180) / Math.PI; // 라디안을 각도로 변환
+}
+
+// 두 터치 간의 각도 계산
+function getPinchAngle(e) {
     const touch1 = e.touches[0];
     const touch2 = e.touches[1];
     const angle = Math.atan2(
