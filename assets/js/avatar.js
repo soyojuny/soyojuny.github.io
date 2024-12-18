@@ -4,7 +4,7 @@ const ctx = canvas.getContext('2d');
 // Base Avatar 이미지 미리 로드
 const baseImage = new Image();
 baseImage.src = '../assets/avatars/base_image.png';
-baseImage.onload = renderAvatar; // 이미지가 로드된 후 첫 렌더링
+baseImage.onload = renderAvatar;
 
 // 기본 설정
 const hairColors = ['#000', '#8B4513', '#C19A6B', '#FF0000', '#00FF00', '#0000FF'];
@@ -31,6 +31,11 @@ let accessory = {
 let dragTarget = null;
 let offsetX, offsetY;
 
+// 멀티터치 상태
+let isPinching = false;
+let initialPinchDistance = null;
+let initialSize = null;
+
 // 이미지 로드 함수
 function loadImage(src) {
     const img = new Image();
@@ -43,7 +48,6 @@ function initOptions() {
     const hairStyleContainer = document.getElementById('hairStyles');
     const hairColorContainer = document.getElementById('hairColors');
 
-    // 헤어 색상 옵션
     hairColors.forEach((color) => {
         const div = document.createElement('div');
         div.className = 'color-option';
@@ -57,7 +61,6 @@ function initOptions() {
         hairColorContainer.appendChild(div);
     });
 
-    // 헤어 스타일 옵션
     hairStyles.forEach((src) => {
         const img = document.createElement('img');
         img.src = src;
@@ -68,7 +71,6 @@ function initOptions() {
         hairStyleContainer.appendChild(img);
     });
 
-    // 액세서리 옵션
     accessories.forEach((src) => {
         const img = document.createElement('img');
         img.src = src;
@@ -80,37 +82,99 @@ function initOptions() {
     });
 }
 
-// 드래그 이벤트 설정
-canvas.addEventListener('mousedown', (e) => {
-    const { offsetX: x, offsetY: y } = e;
-    if (isInObject(x, y, hair)) {
-        dragTarget = hair;
-    } else if (isInObject(x, y, accessory)) {
-        dragTarget = accessory;
-    }
+// 이벤트 리스너 등록
+canvas.addEventListener('mousedown', startDrag);
+canvas.addEventListener('touchstart', startDrag);
 
-    if (dragTarget) {
-        offsetX = x - dragTarget.x;
-        offsetY = y - dragTarget.y;
-    }
-});
+window.addEventListener('mousemove', dragMove); // 변경: window로 이동
+window.addEventListener('touchmove', dragMove);
 
-// 드래그 이동 함수
-canvas.addEventListener('mousemove', (e) => {
-    if (dragTarget) {
-        const { offsetX: x, offsetY: y } = e;
-        dragTarget.x = x - offsetX;
-        dragTarget.y = y - offsetY;
-        renderAvatar();
+window.addEventListener('mouseup', endDrag); // 변경: window로 이동
+canvas.addEventListener('touchend', endDrag);
+
+// 드래그 시작
+function startDrag(e) {
+    e.preventDefault(); // 기본 동작 방지
+    if (e.touches && e.touches.length === 2) {
+        // 멀티터치 확대/축소 시작
+        isPinching = true;
+        initialPinchDistance = getPinchDistance(e);
+        initialSize = dragTarget ? dragTarget.size : null;
+    } else {
+        // 단일 터치 또는 마우스 클릭
+        const { x, y } = getEventPosition(e);
+        if (isInObject(x, y, hair)) {
+            dragTarget = hair;
+        } else if (isInObject(x, y, accessory)) {
+            dragTarget = accessory;
+        }
+
+        if (dragTarget) {
+            offsetX = x - dragTarget.x;
+            offsetY = y - dragTarget.y;
+        }
     }
-});
+}
+
+// 드래그 이동
+function dragMove(e) {
+    if (dragTarget) {
+        e.preventDefault(); // 기본 동작 방지
+        if (isPinching && e.touches && e.touches.length === 2) {
+            // 멀티터치 확대/축소
+            const newPinchDistance = getPinchDistance(e);
+            const scale = newPinchDistance / initialPinchDistance;
+
+            if (dragTarget && initialSize !== null) {
+                dragTarget.size = initialSize * scale;
+                renderAvatar();
+            }
+        } else {
+            // 단일 터치 또는 마우스 드래그
+            const { x, y } = getEventPosition(e);
+            dragTarget.x = x - offsetX;
+            dragTarget.y = y - offsetY;
+            renderAvatar();
+        }
+    }
+}
 
 // 드래그 종료
-canvas.addEventListener('mouseup', () => {
+function endDrag(e) {
+    if (e.touches && e.touches.length === 0) {
+        isPinching = false;
+        initialPinchDistance = null;
+        initialSize = null;
+    }
     dragTarget = null;
-});
+}
 
-// 객체 안에 클릭이 되었는지 확인하는 함수
+// 두 터치 간 거리 계산
+function getPinchDistance(e) {
+    const touch1 = e.touches[0];
+    const touch2 = e.touches[1];
+    const dx = touch2.clientX - touch1.clientX;
+    const dy = touch2.clientY - touch1.clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+}
+
+// 이벤트의 실제 위치 계산
+function getEventPosition(e) {
+    const rect = canvas.getBoundingClientRect();
+    if (e.touches) {
+        return {
+            x: e.touches[0].clientX - rect.left,
+            y: e.touches[0].clientY - rect.top,
+        };
+    } else {
+        return {
+            x: e.clientX - rect.left,
+            y: e.clientY - rect.top,
+        };
+    }
+}
+
+// 객체 안에 클릭이 되었는지 확인
 function isInObject(x, y, object) {
     return (
         x > object.x - object.size / 2 &&
