@@ -15,10 +15,14 @@
             <h3>헤어 스타일</h3>
             <div class="hair-options" id="hairStyles"></div>
             <button id="removeHairButton">헤어 삭제</button>
-            <button id="addHairButton" style="display: none;">헤어 추가</button> <!-- 숨겨진 버튼 -->
+            <button id="addHairButton" style="display: none;">헤어 추가</button>
 
             <h3>헤어 색상</h3>
             <div class="color-palette" id="hairColors"></div>
+            <button id="resetHairColorButton">색상 초기화</button>
+
+            <h3>헤어 투명도</h3>
+            <input type="range" id="hairOpacity" min="0" max="1" step="0.1" value="1">
 
             <h3>헤어 크기</h3>
             <input type="range" id="hairSize" min="50" max="1000" value="120">
@@ -29,7 +33,7 @@
             <h3>액세서리</h3>
             <div class="accessories" id="accessoriesContainer"></div>
             <button id="removeAccessoryButton">액세서리 삭제</button>
-            <button id="addAccessoryButton" style="display: none;">액세서리 추가</button> <!-- 숨겨진 버튼 -->
+            <button id="addAccessoryButton" style="display: none;">액세서리 추가</button>
 
             <h3>액세서리 크기</h3>
             <input type="range" id="accessorySize" min="50" max="1000" value="100">

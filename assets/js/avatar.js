@@ -18,6 +18,8 @@ let hair = {
     y: 100,
     size: 120,
     rotation: 0,
+    color: null, // 초기에는 색상 없음
+    opacity: 1 // 투명도 초기값
 };
 let accessory = {
     img: null,
@@ -53,9 +55,7 @@ function initOptions() {
         div.className = 'color-option';
         div.style.backgroundColor = color;
         div.addEventListener('click', () => {
-            ctx.globalCompositeOperation = 'source-over';
-            ctx.fillStyle = color;
-            ctx.fill();
+            hair.color = color; // 헤어 색상 설정
             renderAvatar();
         });
         hairColorContainer.appendChild(div);
@@ -69,6 +69,18 @@ function initOptions() {
             renderAvatar();
         });
         hairStyleContainer.appendChild(img);
+    });
+
+    // 색상 초기화 버튼
+    document.getElementById('resetHairColorButton').addEventListener('click', () => {
+        hair.color = null; // 색상 초기화
+        renderAvatar();
+    });
+
+    // 투명도 슬라이더
+    document.getElementById('hairOpacity').addEventListener('input', (e) => {
+        hair.opacity = e.target.value; // 투명도 값 설정
+        renderAvatar();
     });
 
     accessories.forEach((src) => {
@@ -251,12 +263,46 @@ function renderAvatar() {
     ctx.drawImage(baseImage, 0, 0, canvas.width, canvas.height);
     
     if (hair.img) {
-        drawRotatedImage(hair);
+        drawHairWithColor(hair);
     }
     
     if (accessory.img) {
         drawRotatedImage(accessory);
     }
+}
+
+// 헤어 렌더링 함수
+function drawHairWithColor(object) {
+    if (!object.img) return;
+
+    ctx.save();
+    ctx.translate(object.x, object.y);
+    ctx.rotate((object.rotation * Math.PI) / 180);
+
+    // 헤어 이미지 렌더링
+    ctx.drawImage(object.img, -object.size / 2, -object.size / 2, object.size, object.size);
+
+    // 헤어 색상 적용
+    if (object.color) {
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = object.size;
+        tempCanvas.height = object.size;
+        const tempCtx = tempCanvas.getContext('2d');
+
+        // 헤어 이미지 복사
+        tempCtx.drawImage(object.img, 0, 0, object.size, object.size);
+
+        // 색상 적용
+        tempCtx.globalCompositeOperation = 'source-in';
+        tempCtx.fillStyle = object.color;
+        tempCtx.globalAlpha = object.opacity; // 투명도 적용
+        tempCtx.fillRect(0, 0, object.size, object.size);
+
+        // 결과를 캔버스에 렌더링
+        ctx.drawImage(tempCanvas, -object.size / 2, -object.size / 2);
+    }
+
+    ctx.restore();
 }
 
 // 회전된 이미지를 그리는 함수
