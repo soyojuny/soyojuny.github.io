@@ -118,24 +118,36 @@ function startDrag(e) {
 
 // 드래그 이동
 function dragMove(e) {
-    if (dragTarget) {
-        e.preventDefault(); // 기본 동작 방지
-        if (isPinching && e.touches && e.touches.length === 2) {
-            // 멀티터치 확대/축소
-            const newPinchDistance = getPinchDistance(e);
-            const scale = newPinchDistance / initialPinchDistance;
+    if (isPinching && e.touches && e.touches.length === 2) {
+        e.preventDefault(); // 기본 스크롤 방지
 
-            if (dragTarget && initialSize !== null) {
-                dragTarget.size = initialSize * scale;
-                renderAvatar();
-            }
-        } else {
-            // 단일 터치 또는 마우스 드래그
-            const { x, y } = getEventPosition(e);
-            dragTarget.x = x - offsetX;
-            dragTarget.y = y - offsetY;
-            renderAvatar();
+        // 확대/축소
+        const newPinchDistance = getPinchDistance(e);
+        const scale = newPinchDistance / initialPinchDistance;
+
+        if (dragTarget && initialSize !== null) {
+            dragTarget.size = initialSize * scale;
         }
+
+        // 회전
+        const newAngle = getPinchAngle(e);
+        if (initialRotationAngle === null) {
+            initialRotationAngle = newAngle;
+            initialObjectRotation = dragTarget.rotation;
+        } else {
+            const angleDiff = newAngle - initialRotationAngle;
+            dragTarget.rotation = initialObjectRotation + angleDiff;
+        }
+
+        renderAvatar();
+    } else if (dragTarget) {
+        const { x, y } = getEventPosition(e);
+
+        const speedFactor = 1.5; // 속도 가속도 추가
+        dragTarget.x += (x - (dragTarget.x + offsetX)) * speedFactor;
+        dragTarget.y += (y - (dragTarget.y + offsetY)) * speedFactor;
+
+        renderAvatar();
     }
 }
 
@@ -145,6 +157,8 @@ function endDrag(e) {
         isPinching = false;
         initialPinchDistance = null;
         initialSize = null;
+        initialRotationAngle = null; // 회전 초기화
+        initialObjectRotation = null;
     }
     dragTarget = null;
 }
@@ -153,9 +167,11 @@ function endDrag(e) {
 function getPinchDistance(e) {
     const touch1 = e.touches[0];
     const touch2 = e.touches[1];
-    const dx = touch2.clientX - touch1.clientX;
-    const dy = touch2.clientY - touch1.clientY;
-    return Math.sqrt(dx * dx + dy * dy);
+    const angle = Math.atan2(
+        touch2.clientY - touch1.clientY,
+        touch2.clientX - touch1.clientX
+    );
+    return (angle * 180) / Math.PI; // 라디안을 각도로 변환
 }
 
 // 이벤트의 실제 위치 계산
@@ -176,11 +192,14 @@ function getEventPosition(e) {
 
 // 객체 안에 클릭이 되었는지 확인
 function isInObject(x, y, object) {
+    // 이미지 전체 영역을 기준으로 좌표 체크
+    const halfWidth = object.size / 2;
+    const halfHeight = object.size / 2;
     return (
-        x > object.x - object.size / 2 &&
-        x < object.x + object.size / 2 &&
-        y > object.y - object.size / 2 &&
-        y < object.y + object.size / 2
+        x > object.x - halfWidth &&
+        x < object.x + halfWidth &&
+        y > object.y - halfHeight &&
+        y < object.y + halfHeight
     );
 }
 
