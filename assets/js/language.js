@@ -1,5 +1,5 @@
-import { where, orderBy } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
-import { getCollectionData } from "./firebase.js";
+import { where, orderBy, increment } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+import { getCollectionData, updateDocumentData } from "./firebase.js";
 
 // 날짜를 yyyymmdd 형식으로 변환하는 함수
 function getFormattedDate(offset = 0) {
@@ -61,18 +61,42 @@ async function renderData() {
 
             const button = document.createElement("button");
             button.className = "block-button";
-            
-            // status에 따라 버튼 클래스 및 텍스트 변경
-            if (item.status === "done") {
-                button.classList.add("done-button"); // "done" 상태에서 사용될 클래스
-                button.textContent = "Completed"; // 버튼 텍스트를 "Completed"로 변경
-                button.style.cursor = "pointer"; // 클릭 금지 표시 제거
-            } else if (item.status === "waiting") {
-                button.classList.add("waiting-button"); // "waiting" 상태에서 사용될 클래스
-                button.textContent = "Homework"; // "waiting" 상태에서는 "Homework" 텍스트
-            }
 
-            button.addEventListener("click", () => navigateToPage(item.link, item.id));
+            // status에 따라 버튼 클래스 및 텍스트 변경
+            if (item.status === "check") {
+                button.classList.add("check-button");
+                button.textContent = `${item.point} point`;
+                
+                button.addEventListener("click", async () => {
+                    event.stopPropagation();
+                    try {
+                        // status를 finished로 변경
+                        await updateDocumentData(`homework/Language Framework/items/${item.id}`, { status: "done" });
+
+                        // /john/point 문서의 total 점수 +10
+                        await updateDocumentData('/john/point', { total: increment(item.point) });
+
+                        // 버튼 텍스트와 상태 업데이트
+                        button.textContent = "Completed";
+                        button.className = "block-button done-button";
+                        
+                        // alert(`Status updated to finished and 10 points added to total.`);
+                    } catch (error) {
+                        console.error("Error updating status or points:", error);
+                    }
+                });
+            } else if (item.status === "waiting") {
+                button.classList.add("waiting-button");
+                button.textContent = "Homework";
+
+                button.addEventListener("click", () => navigateToPage(item.link, item.id));
+            } else if (item.status === "done") {
+                button.classList.add("done-button");
+                button.textContent = "Completed";
+                button.style.cursor = "pointer";
+
+                button.addEventListener("click", () => navigateToPage(item.link, item.id));
+            }
 
             div.appendChild(span);
             div.appendChild(button);
