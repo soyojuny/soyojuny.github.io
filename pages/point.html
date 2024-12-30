@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>포인트 관리</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <!-- 헤더 영역 -->
+    <header class="bg-white shadow-sm fixed w-full top-0 z-10">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex items-center">
+                <button id="back-button" class="text-gray-600 hover:text-gray-900">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                </button>
+                <h1 class="text-xl font-bold ml-4">포인트 관리</h1>
+            </div>
+        </div>
+    </header>
+
+    <!-- 메인 컨텐츠 -->
+    <main class="container mx-auto px-4 pt-20 pb-6">
+        <!-- 포인트 현황 카드 -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 class="text-lg font-semibold mb-2">현재 포인트</h2>
+            <p id="current-point" class="text-3xl font-bold text-blue-600">0 P</p>
+        </div>
+        
+        <!-- 포인트 사용 메뉴 -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-lg font-semibold mb-4">포인트 사용하기</h2>
+            
+            <!-- 쿠폰 교환 버튼 -->
+            <button id="exchange-button" class="w-full bg-blue-500 text-white rounded-lg py-3 mb-4 hover:bg-blue-600 transition-colors">
+                쿠폰으로 교환하기
+            </button>
+
+            <!-- 쿠폰 리스트 아코디언 -->
+            <div class="border rounded-lg">
+                <button id="toggle-coupon-list" class="w-full px-4 py-3 text-left flex justify-between items-center">
+                    <span class="font-medium">보유 쿠폰 목록</span>
+                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+                <div id="coupon-list" class="hidden px-4 py-3 border-t">
+                    <ul id="coupon-list-items" class="space-y-3"></ul>
+                </div>
+            </div>
+
+            <!-- 아바타 상점 버튼 (준비중) -->
+            <button class="w-full mt-4 bg-gray-100 text-gray-500 rounded-lg py-3 flex justify-between items-center px-4">
+                <span>아바타 상점</span>
+                <span class="text-sm">준비중</span>
+            </button>
+        </div>
+
+        <!-- 포인트 내역 -->
+        <div class="bg-white rounded-lg shadow-md p-6 mt-6">
+            <h2 class="text-lg font-semibold mb-4">포인트 내역</h2>
+            <ul id="point-history-items" class="space-y-4"></ul>
+        </div>
+    </main>
+    <script type="module" src="/assets/js/point.js"></script>
+</body>
+</html>
