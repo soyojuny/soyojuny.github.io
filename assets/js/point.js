@@ -21,16 +21,30 @@ document.addEventListener('DOMContentLoaded', async () => {
         couponListEl.innerHTML = '';
         coupons.forEach(coupon => {
             const statusText = coupon.status === 'non-use' ? '사용가능' : '사용함';
-            const statusColor = coupon.status === 'non-use' ? 'text-blue-500' : 'text-red-500';
-            const listItem = `
-                <li class="flex justify-between items-center">
-                    <div>
-                        <p class="font-medium">${coupon.name}</p>
-                        <p class="text-sm text-gray-500">발급일: ${formatDate(coupon.date)}</p>
-                    </div>
-                    <span class="${statusColor}">${statusText}</span>
-                </li>`;
-            couponListEl.insertAdjacentHTML('beforeend', listItem);
+            const statusColor = coupon.status === 'non-use' ? 'text-blue-500 cursor-pointer' : 'text-red-500';
+            const listItem = document.createElement('li');
+            listItem.classList.add('flex', 'justify-between', 'items-center');
+            listItem.innerHTML = `
+                <div>
+                    <p class="font-medium">${coupon.name}</p>
+                    <p class="text-sm text-gray-500">발급일: ${formatDate(coupon.date)}</p>
+                </div>
+                <span class="${statusColor}" data-id="${coupon.id}">${statusText}</span>
+            `;
+
+            // 클릭 이벤트 추가 (사용가능 상태일 때만)
+            if (coupon.status === 'non-use') {
+                listItem.querySelector('span').addEventListener('click', async () => {
+                    const confirmUse = confirm('쿠폰을 사용하시겠습니까?');
+                    if (confirmUse) {
+                        await updateDocumentData(`john/coupon/coupons/${coupon.id}`, { status: 'used' });
+                        alert('쿠폰이 사용되었습니다.');
+                        updateCoupons(); // 쿠폰 목록 갱신
+                    }
+                });
+            }
+
+            couponListEl.appendChild(listItem);
         });
     };
 
