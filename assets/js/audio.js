@@ -127,7 +127,7 @@ async function updateStatusToDone() {
 
     try {
         const docRef = `${collectionPath}/${id}`;
-        await updateDocumentData(docRef, { status: "done" });
+        await updateDocumentData(docRef, { status: "check" });
         console.log("Document status updated to 'done'");
 
         // 상태 업데이트 후 이전 페이지로 돌아가기

@@ -56,7 +56,7 @@ async function updateStatusToDone() {
     }
 
     try {
-        await updateDocumentData(`${collectionPath}/${id}`, { status: "done" });
+        await updateDocumentData(`${collectionPath}/${id}`, { status: "check" });
         window.history.back();
     } catch (error) {
         console.error("문서 상태 업데이트 오류:", error);

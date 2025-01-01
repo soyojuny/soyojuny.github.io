@@ -88,7 +88,7 @@ async function updateStatusToDone() {
     }
 
     try {
-        await updateDocumentData(`${collectionPath}/${id}`, { status: "done" });
+        await updateDocumentData(`${collectionPath}/${id}`, { status: "check" });
         console.log("Document status updated to 'done'");
         window.history.back(); // 이전 화면으로 돌아가기
     } catch (error) {
