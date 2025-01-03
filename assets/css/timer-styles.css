@@ -55,7 +55,7 @@ body, html {
 }
 
 /* 버튼 스타일 */
-.button-start, .button-reset, .complete-button {
+.button-start, .button-pause, .button-reset, .complete-button {
     font-size: 1.2rem;
     padding: 10px 20px;
     border-radius: 8px;
@@ -66,12 +66,21 @@ body, html {
 }
 
 .button-start {
-    background-color: #48bb78; /* Tailwind green-500 */
+    background-color: #007BFF; /* Tailwind green-500 */
     color: white;
 }
 
 .button-start:hover {
-    background-color: #38a169; /* Tailwind green-600 */
+    background-color: #0056b3; /* Tailwind green-600 */
+}
+
+.button-pause {
+    background-color: #007BFF; /* Tailwind green-500 */
+    color: white;
+}
+
+.button-pause:hover {
+    background-color: #0056b3; /* Tailwind green-600 */
 }
 
 .button-reset {
