@@ -45,15 +45,15 @@ h1 {
     align-items: center;
     justify-content: space-between;
     margin: 10px 0;
-    padding: 10px;
+    padding: 5px;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .audio-item img {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     margin-right: 15px;
     border-radius: 5px;
 }
@@ -61,7 +61,7 @@ h1 {
 .audio-item button {
     padding: 10px 20px;
     cursor: pointer;
-    background-color: #4CAF50;
+    background-color: #007BFF;
     color: white;
     border: none;
     border-radius: 5px;
@@ -70,7 +70,7 @@ h1 {
 }
 
 .audio-item button:hover {
-    background-color: #45a049;
+    background-color: #0056b3;
 }
 
 .audio-item button:disabled {
@@ -87,7 +87,6 @@ button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    margin-top: 30px;
 }
 
 button:disabled {

@@ -22,7 +22,7 @@ async function fetchFirestoreData(collectionPath, id) {
 
 // 오디오 플레이어 상태 관리
 let playCount = 0;
-let isPlaying = false; // 현재 재생 상태
+let isPlaying = false; // 현재 듣기 상태
 function setupAudioPlayer(src) {
     const audioPlayer = document.getElementById('audioPlayer');
     const playPauseButton = document.getElementById('playPauseButton');
@@ -37,11 +37,11 @@ function setupAudioPlayer(src) {
     playCountText.textContent = `듣기 횟수: ${playCount}`;
     completeButton.disabled = true;
 
-    // 재생/일시 정지 버튼 클릭 이벤트
+    // 듣기/일시 정지 버튼 클릭 이벤트
     playPauseButton.addEventListener('click', () => {
         if (isPlaying) {
             audioPlayer.pause();
-            playPauseButton.textContent = "재생";
+            playPauseButton.textContent = "듣기";
         } else {
             audioPlayer.play();
             playPauseButton.textContent = "일시 정지";
@@ -51,16 +51,16 @@ function setupAudioPlayer(src) {
 
     // 다시 듣기 버튼 클릭 이벤트
     replayButton.addEventListener('click', () => {
-        audioPlayer.currentTime = 0; // 처음부터 재생
+        audioPlayer.currentTime = 0; // 처음부터 듣기
         audioPlayer.play();
         playPauseButton.textContent = "일시 정지";
         isPlaying = true;
     });
 
-    // 오디오 재생이 끝났을 때
+    // 오디오 듣기이 끝났을 때
     audioPlayer.onended = function () {
         isPlaying = false;
-        playPauseButton.textContent = "재생";
+        playPauseButton.textContent = "듣기";
 
         if (playCount < 5) {
             playCount++;
