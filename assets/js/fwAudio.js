@@ -22,23 +22,50 @@ async function fetchFirestoreData(collectionPath, id) {
 
 // 오디오 플레이어 상태 관리
 let playCount = 0;
-function updateAudioPlayer(src) {
+let isPlaying = false; // 현재 재생 상태
+function setupAudioPlayer(src) {
     const audioPlayer = document.getElementById('audioPlayer');
+    const playPauseButton = document.getElementById('playPauseButton');
+    const replayButton = document.getElementById('replayButton');
     const playCountText = document.getElementById('playCountText');
     const completeButton = document.getElementById('completeButton');
 
     audioPlayer.src = src;
+    audioPlayer.controls = true; // 기본 컨트롤 표시
+    audioPlayer.style.pointerEvents = "none"; // 진행 바 클릭 비활성화
     playCount = 0;
     playCountText.textContent = `듣기 횟수: ${playCount}`;
+    completeButton.disabled = true;
 
-    // 오디오 재생이 완전히 완료된 후 카운트 증가
-    audioPlayer.onended = function() {
-        // 5회 미만일 때만 카운트 증가
+    // 재생/일시 정지 버튼 클릭 이벤트
+    playPauseButton.addEventListener('click', () => {
+        if (isPlaying) {
+            audioPlayer.pause();
+            playPauseButton.textContent = "재생";
+        } else {
+            audioPlayer.play();
+            playPauseButton.textContent = "일시 정지";
+        }
+        isPlaying = !isPlaying;
+    });
+
+    // 다시 듣기 버튼 클릭 이벤트
+    replayButton.addEventListener('click', () => {
+        audioPlayer.currentTime = 0; // 처음부터 재생
+        audioPlayer.play();
+        playPauseButton.textContent = "일시 정지";
+        isPlaying = true;
+    });
+
+    // 오디오 재생이 끝났을 때
+    audioPlayer.onended = function () {
+        isPlaying = false;
+        playPauseButton.textContent = "재생";
+
         if (playCount < 5) {
             playCount++;
             playCountText.textContent = `듣기 횟수: ${playCount}`;
 
-            // 5회 도달 시 완료 버튼 활성화
             if (playCount >= 5) {
                 completeButton.disabled = false;
             }
@@ -78,7 +105,7 @@ async function renderPage() {
         const { title, src } = data;
         const titleContainer = document.getElementById('titleContainer');
         titleContainer.textContent = title;
-        updateAudioPlayer(src);
+        setupAudioPlayer(src);
     } else {
         console.error("데이터를 찾을 수 없거나 가져오기 오류");
     }

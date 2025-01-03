@@ -36,20 +36,49 @@ body, html {
     display: flex;
     flex-direction: column;
     align-items: center; /* 오디오 플레이어 중앙 정렬 */
+    gap: 10px;
 }
 
 .audio-player audio {
     width: 100%;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    pointer-events: none; /* 진행 바 비활성화 */
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.control-button {
+    font-size: 1.1rem;
+    padding: 10px 20px;
+    border-radius: 8px;
+    background-color: #48bb78;
+    color: white;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.control-button:hover {
+    background-color: #38a169;
+}
+
+.control-button:disabled {
+    background-color: #cbd5e0;
+    cursor: not-allowed;
 }
 
 .play-count-text {
     text-align: center;
     font-size: 1rem;
     color: #4a5568;
-    margin: 10px 0;
-    width: 100%; /* 전체 너비 사용 */
+    margin-top: 10px;
 }
 
 .footer-container {
