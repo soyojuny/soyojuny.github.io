@@ -1,0 +1,126 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    justify-content: center; /* 수평 중앙 정렬 */
+    align-items: flex-start; /* 상단 수직 정렬 유지 */
+    font-family: Arial, sans-serif;
+    background-color: #f7fafc;
+    padding-top: 50px; /* 상단 여백 유지 */
+}
+
+.video-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 내부 컨텐츠 중앙 정렬 */
+    width: 100%;
+    max-width: 600px; /* 최대 너비 확장 */
+    padding: 20px;
+    gap: 20px;
+    text-align: center; /* 텍스트 중앙 정렬 */
+}
+
+.title-container {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #1a202c;
+    margin-bottom: 20px;
+    width: 100%; /* 전체 너비 사용 */
+}
+
+.video-player {
+    width: 100%;
+    max-width: 1024px; /* 비디오 최대 크기 설정 */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 비디오 플레이어 중앙 정렬 */
+    gap: 10px;
+}
+
+.video-player video {
+    width: 100%;
+    max-height: 768px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background-color: black;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.control-button {
+    font-size: 1.1rem;
+    padding: 10px 20px;
+    border-radius: 8px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.control-button:hover {
+    background-color: #0056b3;
+}
+
+.control-button:disabled {
+    background-color: #cbd5e0;
+    cursor: not-allowed;
+}
+
+.play-count-text {
+    text-align: center;
+    font-size: 1rem;
+    color: #4a5568;
+    margin-top: 10px;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.complete-button {
+    font-size: 1.1rem;
+    padding: 10px 20px;
+    border-radius: 8px;
+    background-color: #4299e1;
+    color: white;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.complete-button:hover {
+    background-color: #3182ce;
+}
+
+.complete-button:disabled {
+    background-color: #cbd5e0;
+    cursor: not-allowed;
+}
+
+@media (max-width: 480px) {
+    .video-container {
+        padding: 10px;
+        max-width: 95%;
+    }
+
+    .title-container {
+        font-size: 1.2rem;
+    }
+
+    .video-player video {
+        max-width: 100%;
+        max-height: 250px;
+    }
+}
