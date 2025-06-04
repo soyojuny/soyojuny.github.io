@@ -81,7 +81,6 @@ async function renderData() {
                         button.textContent = "Completed";
                         button.className = "block-button done-button";
                         
-                        // alert(`Status updated to finished and 10 points added to total.`);
                     } catch (error) {
                         console.error("Error updating status or points:", error);
                     }

@@ -79,8 +79,6 @@ async function renderData() {
                         // 버튼 텍스트와 상태 업데이트
                         button.textContent = "Completed";
                         button.className = "block-button done-button";
-                        
-                        // alert(`Status updated to finished and 10 points added to total.`);
                     } catch (error) {
                         console.error("Error updating status or points:", error);
                     }
