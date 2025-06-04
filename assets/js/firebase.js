@@ -1,6 +1,6 @@
 // Firebase 설정 및 초기화
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-import { getFirestore, collection, getDocs, query, doc, getDoc, updateDoc, addDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+import { getFirestore, collection, getDocs, query, doc, getDoc, updateDoc, addDoc, runTransaction, increment as firestoreIncrement } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDQ5v5NsVKwnXtu_ZMvhsYXa8IpMSloguM",
@@ -82,4 +82,23 @@ export async function addDocumentData(collectionName, data) {
     } catch (error) {
         console.error("Error adding document:", error);
     }
+}
+
+// 트랜잭션으로 상태와 포인트를 동시에 안전하게 변경
+export async function safelyUpdateHomeworkAndPoints(documentPath, point) {
+    const itemRef = doc(db, documentPath);
+    const pointRef = doc(db, `/john/point`);
+
+    await runTransaction(db, async (transaction) => {
+        const itemSnap = await transaction.get(itemRef);
+        if (!itemSnap.exists()) throw new Error("Item not found");
+
+        const currentStatus = itemSnap.data().status;
+        if (currentStatus !== "check") {
+            throw new Error("Already claimed");
+        }
+
+        transaction.update(itemRef, { status: "done" });
+        transaction.update(pointRef, { total: firestoreIncrement(point) });
+    });
 }

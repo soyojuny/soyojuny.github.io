@@ -1,5 +1,5 @@
-import { where, orderBy, increment } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
-import { getCollectionData, updateDocumentData } from "./firebase.js";
+import { where, orderBy } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+import { getCollectionData, safelyUpdateHomeworkAndPoints } from "./firebase.js";
 
 // 날짜 형식을 yyyyMMdd로 변환하는 함수
 function getFormattedDate(offset = 0) {
@@ -67,22 +67,28 @@ async function renderData() {
             if (item.status === "check") {
                 button.classList.add("check-button");
                 button.textContent = `${item.point} point`;
+                let isProcessing = false;
                 
-                button.addEventListener("click", async () => {
+                button.addEventListener("click", async (event) => {
+                    if (isProcessing) return;
+                    isProcessing = true;
                     event.stopPropagation();
+                    button.disabled = true;
+
+                    const itemRef = `homework/Fiction & Writing/items/${item.id}`;
+
                     try {
-                        // status를 finished로 변경
-                        await updateDocumentData(`homework/Fiction & Writing/items/${item.id}`, { status: "done" });
-
-                        // /john/point 문서의 total 점수 +10
-                        await updateDocumentData('/john/point', { total: increment(item.point) });
-
-                        // 버튼 텍스트와 상태 업데이트
+                        await safelyUpdateHomeworkAndPoints(itemRef, item.point);
                         button.textContent = "Completed";
                         button.className = "block-button done-button";
                         
                     } catch (error) {
                         console.error("Error updating status or points:", error);
+                        alert("이미 포인트를 받았습니다.");
+                        await renderData(); // 상태 동기화
+                    } finally {
+                        isProcessing = false;
+                        button.disabled = false;
                     }
                 });
             } else if (item.status === "waiting") {
