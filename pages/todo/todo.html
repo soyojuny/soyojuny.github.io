@@ -2,11 +2,12 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>QR 코드 mp3 플레이어</title>
+  <title>QR코드 mp3 플레이어</title>
+  <!-- html5-qrcode 라이브러리 CDN -->
   <script src="https://unpkg.com/html5-qrcode"></script>
   <style>
     body { font-family: Arial, sans-serif; padding: 2rem; }
-    #reader { width: 320px; margin: 1rem auto; }
+    #reader { width: 320px; margin: 2rem auto; }
     .center { text-align: center; }
     button { padding: 1rem 2rem; font-size: 1.2rem; }
   </style>
@@ -22,23 +23,24 @@
     const readerDiv = document.getElementById('reader');
     let qrScanner = null;
 
-    btn.onclick = async function() {
+    btn.onclick = function() {
       btn.style.display = 'none';
       readerDiv.style.display = '';
       qrScanner = new Html5Qrcode("reader");
       qrScanner.start(
-        { facingMode: "environment" }, // 후면카메라 권장
+        { facingMode: "environment" }, // 모바일 후면 카메라
         {
-          fps: 10,    // 초당 스캔 프레임
-          qrbox: 250  // QR 인식 영역 크기
+          fps: 10,
+          qrbox: 250
         },
         qrCodeMessage => {
-          // QR코드가 인식된 경우
+          // QR코드 인식 성공 시
           if(qrScanner) qrScanner.stop();
           window.location.href = qrCodeMessage;
         },
         errorMessage => {
-          // 인식 실패 메시지(무시 가능)
+          // 인식 실패 시(여러번 발생, 무시 가능)
+          // console.log('인식 실패:', errorMessage);
         }
       ).catch(err => {
         alert("카메라 접근 실패: " + err);
