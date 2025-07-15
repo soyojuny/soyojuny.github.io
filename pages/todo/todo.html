@@ -1,21 +1,51 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Homework</title>
-    <!-- CSS 파일 연결 -->
-    <link rel="stylesheet" href="../../assets/css/common.css">
-    <link rel="stylesheet" href="../../assets/css/styles.css">
+  <meta charset="UTF-8" />
+  <title>QR 코드 mp3 플레이어</title>
+  <script src="https://unpkg.com/html5-qrcode"></script>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 2rem; }
+    #reader { width: 320px; margin: 1rem auto; }
+    .center { text-align: center; }
+    button { padding: 1rem 2rem; font-size: 1.2rem; }
+  </style>
 </head>
 <body>
-    <div class="content" id="todo-list">
-        <!-- Firebase에서 가져온 데이터가 여기에 렌더링됩니다 -->
-    </div>
-    <!-- Firebase 및 Custom JS 파일 연결 -->
-    <script type="module" src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
-    <script type="module" src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js"></script>
-    <script type="module" src="../../assets/js/firebase.js"></script>
-    <script type="module" src="../../assets/js/todo.js"></script>
+  <div class="center">
+    <button id="openCameraBtn">카메라로 QR 스캔</button>
+    <div id="reader" style="display:none;"></div>
+  </div>
+
+  <script>
+    const btn = document.getElementById('openCameraBtn');
+    const readerDiv = document.getElementById('reader');
+    let qrScanner = null;
+
+    btn.onclick = async function() {
+      btn.style.display = 'none';
+      readerDiv.style.display = '';
+      qrScanner = new Html5Qrcode("reader");
+      qrScanner.start(
+        { facingMode: "environment" }, // 후면카메라 권장
+        {
+          fps: 10,    // 초당 스캔 프레임
+          qrbox: 250  // QR 인식 영역 크기
+        },
+        qrCodeMessage => {
+          // QR코드가 인식된 경우
+          if(qrScanner) qrScanner.stop();
+          window.location.href = qrCodeMessage;
+        },
+        errorMessage => {
+          // 인식 실패 메시지(무시 가능)
+        }
+      ).catch(err => {
+        alert("카메라 접근 실패: " + err);
+        btn.style.display = '';
+        readerDiv.style.display = 'none';
+      });
+    };
+  </script>
 </body>
 </html>
